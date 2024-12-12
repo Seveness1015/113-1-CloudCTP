@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Diary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav style="display: flex; justify-content: space-around; font-size: 20pt;">
+        <a href="{{ url_for('index') }}"> 首頁 </a>
+        <a href="{{ url_for('new_entry') }}"> 新增日記 </a>
+        <button onclick="showInstructions()"> 使用說明 </button>
+        {% if 'username' not in session %}
+            <a href="{{ url_for('register') }}"> 註冊帳戶 </a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}"> 登出 </a>
+    </nav>
+    <hr>
+    <script>
+        function showInstructions() {
+            fetch('/instructions')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data['使用說明'].join('\n'));
+                });
+        }
+    </script>
+    {% block content %}{% endblock %}
+</body>
+</html>

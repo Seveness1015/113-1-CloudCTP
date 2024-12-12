@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>My Diary</h1>
+    {% for entry in entries %}
+        <div style="position: relative;">
+            <button style="position: absolute; top: 0; right: 0;" onclick="deleteEntry('{{ entry.id }}')"> 刪除日記 </button>
+            <h2>{{ entry.title }}</h2>
+            <p>{{ entry.date_created }} - Mood: {{ entry.mood }}</p>
+            <!-- 使用 safe 過濾器來處理換行 -->
+            <p>{{ entry.content.replace('\n', '<br>') | safe }}</p>
+            <hr>
+        </div>
+    {% endfor %}
+    <script>
+        function deleteEntry(entryId) {
+            fetch(`/delete/${entryId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => window.location.reload());
+        }
+    </script>
+{% endblock %}
